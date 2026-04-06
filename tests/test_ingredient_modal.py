@@ -1,0 +1,24 @@
+import pytest
+import allure
+from data import Ingredients, ModalTexts, Timeouts
+
+@allure.epic("Ингредиенты")
+class TestIngredientModal:
+    @pytest.mark.modal
+    @pytest.mark.smoke
+    @allure.title("Клик на ингредиент открывает окно с деталями")
+    def test_ingredient_modal_opens(self, constructor_page, modal_page, base_url):
+        constructor_page.open(base_url)
+        constructor_page.click_ingredient(Ingredients.BUN_R2_D3)
+        assert modal_page.is_ingredient_details_visible()
+        assert modal_page.get_ingredient_details_title() == ModalTexts.TITLE
+        modal_page.close()
+
+    @pytest.mark.modal
+    @allure.title("Закрытие модального окна крестиком")
+    def test_ingredient_modal_closes(self, constructor_page, modal_page, base_url):
+        constructor_page.open(base_url)
+        constructor_page.click_ingredient(Ingredients.BUN_R2_D3)
+        assert modal_page.is_ingredient_details_visible()
+        modal_page.close()
+        assert not modal_page.is_ingredient_details_visible(timeout=Timeouts.SHORT)
