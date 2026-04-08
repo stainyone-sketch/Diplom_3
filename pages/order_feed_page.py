@@ -21,7 +21,7 @@ class OrderFeedPage(BasePage):
 
     @allure.step("Получить список номеров заказов в работе")
     def get_in_progress_orders(self):
-        elements = self.driver.find_elements(*self.locators.ORDERS_IN_PROGRESS)
+        elements = self.find_elements(self.locators.ORDERS_IN_PROGRESS)
         return [el.text for el in elements]
 
     @allure.step("Дождаться появления номера заказа в разделе «В работе»")

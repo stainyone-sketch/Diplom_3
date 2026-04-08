@@ -10,7 +10,7 @@ class ModalPage(BasePage):
         try:
             close_btn.click()
         except:
-            self.driver.execute_script("arguments[0].click();", close_btn)
+            self.js_click(Modal.CLOSE_BUTTON)
         self.wait_invisible(Modal.MODAL_OVERLAY)
 
     @allure.step("Получить номер заказа из модального окна")

@@ -7,6 +7,7 @@ from pages.auth_page import AuthPage
 from pages.constructor_page import ConstructorPage
 from pages.modal_page import ModalPage
 from pages.order_feed_page import OrderFeedPage
+from pages.base_page import BasePage
 from data import Urls, FixedUser
 
 def pytest_addoption(parser):
@@ -29,15 +30,10 @@ def driver(request):
     driver.maximize_window()
     yield driver
     try:
-        from pages.base_page import BasePage
         BasePage(driver).close_all_modals()
     except:
         pass
     driver.quit()
-
-@pytest.fixture
-def base_url():
-    return Urls.BASE
 
 @pytest.fixture
 def header_nav(driver):
@@ -60,12 +56,10 @@ def order_feed_page(driver):
     return OrderFeedPage(driver)
 
 @pytest.fixture
-def logged_in_user(driver, base_url, auth_page, header_nav, constructor_page):
-    auth_page.open(base_url)
+def logged_in_user(auth_page, header_nav, constructor_page):
+    auth_page.open(Urls.BASE)
     header_nav.click_personal_account()
     header_nav.click_login_link()
     auth_page.login(FixedUser.EMAIL, FixedUser.PASSWORD)
     constructor_page.wait_visible(constructor_page.ORDER_BUTTON)
     return {"email": FixedUser.EMAIL, "password": FixedUser.PASSWORD}
-
-

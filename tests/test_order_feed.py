@@ -1,13 +1,7 @@
-import pytest
 import allure
+import pytest
 from data import Ingredients
-
-def _create_order(constructor_page, modal_page):
-    constructor_page.add_ingredient_to_order(Ingredients.BUN_R2_D3)
-    constructor_page.add_ingredient_to_order(Ingredients.SAUCE_SPICY_X)
-    constructor_page.click_order_button()
-    modal_page.wait_for_real_order_number()
-    modal_page.close()
+from helpers import create_order
 
 @allure.epic("Лента заказов")
 class TestOrderFeed:
@@ -17,16 +11,14 @@ class TestOrderFeed:
     def test_total_counter_increases(self, logged_in_user, constructor_page, order_feed_page, header_nav, modal_page):
         header_nav.click_feed()
         before = order_feed_page.get_total_orders_count()
-        print(f"\n[TEST] Счётчик ВСЕГО ДО: {before}")
         allure.attach(str(before), name="Счётчик «Выполнено за всё время» ДО", attachment_type=allure.attachment_type.TEXT)
 
         header_nav.click_constructor()
-        _create_order(constructor_page, modal_page)
+        create_order(constructor_page, modal_page)
 
         header_nav.click_feed()
         order_feed_page.wait_for_increase_total(before)
         after = order_feed_page.get_total_orders_count()
-        print(f"[TEST] Счётчик ВСЕГО ПОСЛЕ: {after}")
         allure.attach(str(after), name="Счётчик «Выполнено за всё время» ПОСЛЕ", attachment_type=allure.attachment_type.TEXT)
         assert after > before
 
@@ -34,16 +26,14 @@ class TestOrderFeed:
     def test_today_counter_increases(self, logged_in_user, constructor_page, order_feed_page, header_nav, modal_page):
         header_nav.click_feed()
         before = order_feed_page.get_today_orders_count()
-        print(f"\n[TEST] Счётчик ВСЕГО ДО: {before}")
         allure.attach(str(before), name="Счётчик «Выполнено за сегодня» ДО", attachment_type=allure.attachment_type.TEXT)
 
         header_nav.click_constructor()
-        _create_order(constructor_page, modal_page)
+        create_order(constructor_page, modal_page)
 
         header_nav.click_feed()
         order_feed_page.wait_for_increase_today(before)
         after = order_feed_page.get_today_orders_count()
-        print(f"[TEST] Счётчик ВСЕГО ПОСЛЕ: {after}")
         allure.attach(str(after), name="Счётчик «Выполнено за сегодня» ПОСЛЕ", attachment_type=allure.attachment_type.TEXT)
         assert after > before
 

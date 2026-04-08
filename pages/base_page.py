@@ -3,6 +3,7 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 from data import Timeouts
 
 class BasePage:
@@ -45,6 +46,23 @@ class BasePage:
             self.driver.execute_script("arguments[0].click();", element)
         else:
             element.click()
+
+    @allure.step("Прокрутить к элементу")
+    def scroll_to_element(self, element):
+        self.driver.execute_script("arguments[0].scrollIntoView({block: 'center'});", element)
+
+    @allure.step("Эмуляция drag-and-drop через JavaScript")
+    def drag_and_drop_js(self, source_element, target_element):
+        self.driver.execute_script("""
+            var source = arguments[0];
+            var target = arguments[1];
+            var dragStartEvent = new DragEvent('dragstart', { bubbles: true });
+            var dropEvent = new DragEvent('drop', { bubbles: true });
+            var dragEndEvent = new DragEvent('dragend', { bubbles: true });
+            source.dispatchEvent(dragStartEvent);
+            target.dispatchEvent(dropEvent);
+            source.dispatchEvent(dragEndEvent);
+        """, source_element, target_element)
 
     @allure.step("Ввести текст '{text}' в элемент {locator}")
     def input_text(self, locator, text, timeout=None):
@@ -121,7 +139,6 @@ class BasePage:
         except:
             pass
         try:
-            from selenium.webdriver.common.keys import Keys
             self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.ESCAPE)
         except:
             pass
