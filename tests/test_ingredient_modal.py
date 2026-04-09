@@ -11,7 +11,7 @@ class TestIngredientModal:
         constructor_page.open(Urls.BASE)
         constructor_page.click_ingredient(Ingredients.BUN_R2_D3)
         assert modal_page.is_ingredient_details_visible()
-        assert modal_page.get_ingredient_details_title() == ModalTexts.TITLE
+        assert modal_page.get_ingredient_details_title() == ModalTexts.TITLE # По какой-то причине гит не увидел коммит. Этот тест был исправлен.
 
     @pytest.mark.modal
     @allure.title("Закрытие модального окна крестиком")

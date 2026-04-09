@@ -70,6 +70,10 @@ class BasePage:
         element.clear()
         element.send_keys(text)
 
+    @allure.step("Получить текущий URL страницы")
+    def get_current_url(self):
+        return self.driver.current_url
+
     @allure.step("Получить текст элемента {locator}")
     def get_text(self, locator, timeout=None):
         return self.wait_visible(locator, timeout).text

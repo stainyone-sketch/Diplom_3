@@ -24,10 +24,6 @@ class HeaderNav(BasePage):
     @allure.step("Кликнуть по ссылке «Войти»")
     def click_login_link(self):
         self.js_click(Header.LOGIN_LINK)
-
-    @allure.step("Получить текущий URL")
-    def get_current_url(self):
-        return self.driver.current_url
     
     @allure.step("Проверить, что открыта страница «Конструктор»")
     def is_on_constructor_page(self):
