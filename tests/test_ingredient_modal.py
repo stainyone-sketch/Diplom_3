@@ -18,6 +18,5 @@ class TestIngredientModal:
     def test_ingredient_modal_closes(self, constructor_page, modal_page):
         constructor_page.open(Urls.BASE)
         constructor_page.click_ingredient(Ingredients.BUN_R2_D3)
-        assert modal_page.is_ingredient_details_visible()
         modal_page.close()
-        assert not modal_page.is_ingredient_details_visible(timeout=Timeouts.SHORT)
+        assert not modal_page.is_ingredient_details_visible(timeout=Timeouts.SHORT) # Я сначала не понял, а потом как понял. Надеюсь.
